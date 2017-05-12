@@ -1,9 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
+  public Text scoreText;
+  public Text loseText;
+
+  [SerializeField]
+  private Rect Boundary;//the play area
+
+  
 	[System.Serializable]
     public class Enemy {
         [SerializeField]
@@ -24,10 +32,28 @@ public class GameController : MonoBehaviour {
     [SerializeField]
     List<Wave> Waves;
 	
+  //globally accesible bookmark
+	public static GameController instance = null;
+  
+  private int _score;
+	
+  //enforces this as a singleton, highlander style
+	void Awake()
+	{
+    if(instance == null)
+      instance = this;
+    else if(instance != this)
+      Destroy(gameObject);
+	}
+	
 	void Start()
 	{
 		//start
 		StartCoroutine(RunWaves());
+    
+    loseText.text = "";
+    _score = 0;
+    scoreText.text = "Score: " + _score.ToString();
 	}
 	
 	IEnumerator RunWaves()
@@ -38,10 +64,10 @@ public class GameController : MonoBehaviour {
 			//iterates through enemies in a single wave
 			for(int i = 0; i < Waves[n].Enemies.Count; i++)
 			{
-				Enemy e = ((Waves[n]).Enemies[i]);
+				Enemy _enemy = ((Waves[n]).Enemies[i]);
 				//waits between spawning each enemy
-				yield return new WaitForSeconds(e.DelayTime);
-				Instantiate(e.EnemyPrefab,e.SpawnPosition,Quaternion.identity);
+				yield return new WaitForSeconds(_enemy.DelayTime);
+				Instantiate(_enemy.EnemyPrefab,_enemy.SpawnPosition,Quaternion.identity);
 				}
 			//if the wave is a midboss/boss
 			while(Waves[n].IsEvent)
@@ -54,6 +80,20 @@ public class GameController : MonoBehaviour {
 			}
 			yield return new WaitForSeconds(Waves[n].WaveDelay);
 		}
-	}
-	
+	} 
+  
+  public Rect getBoundary() {
+    return Boundary;
+  }
+  
+  public void AddScore(int scoreToAdd)
+  {
+    _score += scoreToAdd;
+    scoreText.text = "Score: " + _score.ToString();
+  }
+  
+  public void GameOver()
+  {
+    loseText.text = ("DEAD PARROT");
+  }
 }
