@@ -1,13 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyBullet : MonoBehaviour {
 
-	private float bulletSpeed;
+	public Vector2 bulletHeading;
+  public float bulletSpeed;
+  public float bulletAngularVelocity;
+  public String bulletBehavior;
 
   private Rigidbody2D _rigidbody2D;
   private Rect _boundary;//playable area of the screen
+  private float _awakenTime;
+  private String _behavior;
 
 	void Start()//runs when the object is first created
   {
@@ -19,14 +25,14 @@ public class EnemyBullet : MonoBehaviour {
     _rigidbody2D = GetComponent<Rigidbody2D>();
   }
   
-	void Awake()//runs EACH TIME the bullet is fired/recycled
+  void Awake()
   {
-		bulletSpeed = Random.value * 5 + 3;
-	}
+    _awakenTime = Time.time;
+  }
 	
 	void Update() {
-    //moves
-		_rigidbody2D.velocity = Vector2.down * bulletSpeed;
+    //moves according to what its set to do 
+		_rigidbody2D.velocity = bulletHeading * bulletSpeed;
     
     //checks if the bullet is still in the play area
     float _xpos = _rigidbody2D.position.x;
@@ -39,4 +45,8 @@ public class EnemyBullet : MonoBehaviour {
          gameObject.SetActive(false);//kys
        }
 	}
+  
+  float GetAwakenTime() {
+    return _awakenTime;
+  }
 }

@@ -1,0 +1,15 @@
+
+"what doesnt kill you makes you useful to james"
+
+need to preload all the enemies
+
+i dont need to figure out how many pooled bullets i need for each enemey, bullets are generic
+  enough that i can change anything about them when they are rewoken. So i just need a number
+  of bullets that can be on the screen at once, say 1000.
+
+so i have the gamecontroller pool all the enemies in a list and set them to all that they
+  are supposed to do and activate them acoording to their timing in the stage.
+  
+2d bezier spline for enemy paths?
+
+that nifty idea of using particles managed by c# objects instead of millions of gameObjects

@@ -89,7 +89,6 @@ public class PlayerController : MonoBehaviour
   
   void OnTriggerEnter2D(Collider2D other)
   {
-    print("in the function");
     if(other.tag == "EnemyBullet")
     {
       other.gameObject.SetActive(false);//deactivate the bullet
